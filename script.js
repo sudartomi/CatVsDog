@@ -1,91 +1,52 @@
-let playerName = "";
-let dogClicks = 0;
-let catClicks = 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog vs Cat Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Dog vs Cat Clicker Game</h1>
 
-// Load existing leaderboard from localStorage
-let dogLeaderboard = JSON.parse(localStorage.getItem("dogLeaderboard")) || [];
-let catLeaderboard = JSON.parse(localStorage.getItem("catLeaderboard")) || [];
+    <!-- Leaderboard (Now visible before logging in) -->
+    <div id="leaderboardContainer">
+        <div id="dogLeaderboardSection">
+            <h3>Dog Leaderboard</h3>
+            <ol id="dogLeaderboard"></ol>
+        </div>
+        <div id="catLeaderboardSection">
+            <h3>Cat Leaderboard</h3>
+            <ol id="catLeaderboard"></ol>
+        </div>
+    </div>
 
-function startGame() {
-    const nameInput = document.getElementById("playerName").value.trim();
-    if (nameInput === "") {
-        alert("Please enter your name!");
-        return;
-    }
-    playerName = nameInput;
-    document.getElementById("nameInputContainer").style.display = "none";
-    document.getElementById("gameContainer").style.display = "flex";
+    <!-- Name input (Now below leaderboard) -->
+    <div id="nameInputContainer">
+        <h2>Enter Your Name to Play</h2>
+        <input type="text" id="playerName" placeholder="Enter your name">
+        <button onclick="startGame()">Start</button>
+    </div>
 
-    updateLeaderboards();
-}
+    <!-- Game area -->
+    <div id="gameContainer" style="display: none;">
+        <div id="leftSide">
+            <h2>Dogs</h2>
+            <img id="dogImage" src="assets/dog.png" alt="Dog">
+            <p>Your Clicks: <span id="dogClicks">0</span></p>
+        </div>
 
-function clickDog() {
-    dogClicks++;
-    document.getElementById("dogClicks").innerText = dogClicks;
-    document.getElementById("dogSound").play();
-    updateLeaderboard("dog");
-}
+        <div id="rightSide">
+            <h2>Cats</h2>
+            <img id="catImage" src="assets/cat.png" alt="Cat">
+            <p>Your Clicks: <span id="catClicks">0</span></p>
+        </div>
+    </div>
 
-function clickCat() {
-    catClicks++;
-    document.getElementById("catClicks").innerText = catClicks;
-    document.getElementById("catSound").play();
-    updateLeaderboard("cat");
-}
+    <!-- Audio for clicking -->
+    <audio id="dogSound" src="assets/dog-bark.mp3"></audio>
+    <audio id="catSound" src="assets/cat-meow.mp3"></audio>
 
-function updateLeaderboard(animal) {
-    let leaderboard = animal === "dog" ? dogLeaderboard : catLeaderboard;
-    let clicks = animal === "dog" ? dogClicks : catClicks;
-
-    let existingEntry = leaderboard.find(entry => entry.name === playerName);
-    if (existingEntry) {
-        existingEntry.clicks = clicks;
-    } else {
-        leaderboard.push({ name: playerName, clicks: clicks });
-    }
-
-    leaderboard.sort((a, b) => b.clicks - a.clicks);
-    leaderboard = leaderboard.slice(0, 10); // Keep only the top 10
-
-    if (animal === "dog") {
-        dogLeaderboard = leaderboard;
-        localStorage.setItem("dogLeaderboard", JSON.stringify(dogLeaderboard));
-    } else {
-        catLeaderboard = leaderboard;
-        localStorage.setItem("catLeaderboard", JSON.stringify(catLeaderboard));
-    }
-
-    updateLeaderboards();
-}
-
-function updateLeaderboards() {
-    const dogList = document.getElementById("dogLeaderboard");
-    const catList = document.getElementById("catLeaderboard");
-
-    dogList.innerHTML = "";
-    catList.innerHTML = "";
-
-    dogLeaderboard.forEach(entry => {
-        let li = document.createElement("li");
-        li.innerText = `${entry.name}: ${entry.clicks}`;
-        dogList.appendChild(li);
-    });
-
-    catLeaderboard.forEach(entry => {
-        let li = document.createElement("li");
-        li.innerText = `${entry.name}: ${entry.clicks}`;
-        catList.appendChild(li);
-    });
-}
-
-// Add touch event listeners for mobile devices
-document.getElementById("dogImage").addEventListener("click", clickDog);
-document.getElementById("dogImage").addEventListener("touchstart", clickDog);
-
-document.getElementById("catImage").addEventListener("click", clickCat);
-document.getElementById("catImage").addEventListener("touchstart", clickCat);
-
-// Prevent scrolling while tapping on mobile
-document.body.addEventListener("touchmove", function(event) {
-    event.preventDefault();
-}, { passive: false });
+    <script src="script.js"></script>
+</body>
+</html>
