@@ -2,7 +2,7 @@ let playerName = "";
 let dogClicks = 0;
 let catClicks = 0;
 
-// Load existing leaderboard
+// Load existing leaderboard from localStorage
 let dogLeaderboard = JSON.parse(localStorage.getItem("dogLeaderboard")) || [];
 let catLeaderboard = JSON.parse(localStorage.getItem("catLeaderboard")) || [];
 
