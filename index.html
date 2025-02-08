@@ -9,26 +9,7 @@
 <body>
     <h1>Dog vs Cat Clicker Game</h1>
 
-    <div id="nameInputContainer">
-        <input type="text" id="playerName" placeholder="Enter your name">
-        <button onclick="startGame()">Start</button>
-    </div>
-
-    <div id="gameContainer" style="display: none;">
-        <div id="leftSide">
-            <h2>Dogs</h2>
-            <img id="dogImage" src="dog.png" alt="Dog">
-            <p>Clicks: <span id="dogClicks">0</span></p>
-        </div>
-
-        <div id="rightSide">
-            <h2>Cats</h2>
-            <img id="catImage" src="cat.png" alt="Cat">
-            <p>Clicks: <span id="catClicks">0</span></p>
-        </div>
-    </div>
-
-    <h2>Leaderboard</h2>
+    <!-- Leaderboard always visible -->
     <div id="leaderboardContainer">
         <div id="dogLeaderboardSection">
             <h3>Dog Leaderboard</h3>
@@ -40,9 +21,32 @@
         </div>
     </div>
 
-    <audio id="dogSound" src="dog-bark.mp3"></audio>
-    <audio id="catSound" src="cat-meow.mp3"></audio>
+    <!-- Name input before playing -->
+    <div id="nameInputContainer">
+        <input type="text" id="playerName" placeholder="Enter your name">
+        <button onclick="startGame()">Start</button>
+    </div>
+
+    <!-- Game area -->
+    <div id="gameContainer" style="display: none;">
+        <div id="leftSide">
+            <h2>Dogs</h2>
+            <img id="dogImage" src="assets/dog.png" alt="Dog">
+            <p>Your Clicks: <span id="dogClicks">0</span></p>
+        </div>
+
+        <div id="rightSide">
+            <h2>Cats</h2>
+            <img id="catImage" src="assets/cat.png" alt="Cat">
+            <p>Your Clicks: <span id="catClicks">0</span></p>
+        </div>
+    </div>
+
+    <!-- Audio for clicking -->
+    <audio id="dogSound" src="assets/dog-bark.mp3"></audio>
+    <audio id="catSound" src="assets/cat-meow.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
 </html>
+
