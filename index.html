@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogs vs Cats</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dog vs Cat Clicker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="loginScreen">
-        <h1>Welcome! Enter your name to start:</h1>
-        <input type="text" id="playerName" placeholder="Your Name">
-        <button onclick="login()">Start</button>
+
+    <h1>Dog vs Cat Clicker</h1>
+    
+    <div id="login">
+        <label for="username">Enter your name:</label>
+        <input type="text" id="username">
+        <button onclick="startGame()">Start</button>
     </div>
 
-    <div class="container" id="gameScreen" style="display: none;">
-        <div class="side left">
-            <h2>Dogs</h2>
-            <img id="dogImage" src="dog_still.png" onclick="clickDog()" alt="Barking dog">
-            <p>Clicks: <span id="dogCount">0</span></p>
-            <h3>Leaderboard</h3>
-            <ul id="dogLeaderboard"></ul>
+    <div id="game" class="hidden">
+        <div class="container">
+            <div class="box">
+                <h2>Dog</h2>
+                <img id="dog" src="dog.png" alt="Dog">
+                <p id="dogClicks">Clicks: 0</p>
+            </div>
+            <div class="box">
+                <h2>Cat</h2>
+                <img id="cat" src="cat.png" alt="Cat">
+                <p id="catClicks">Clicks: 0</p>
+            </div>
         </div>
-        <div class="middle">
-            <h1>Click on your favorite!</h1>
-            <button onclick="logout()">Logout</button>
-        </div>
-        <div class="side right">
-            <h2>Cats</h2>
-            <img id="catImage" src="cat_still.png" onclick="clickCat()" alt="Meowing cat">
-            <p>Clicks: <span id="catCount">0</span></p>
-            <h3>Leaderboard</h3>
-            <ul id="catLeaderboard"></ul>
-        </div>
+        
+        <button onclick="saveScore()">Save Score</button>
+        
+        <h2>Top 100 Leaderboard</h2>
+        <ul id="leaderboard"></ul>
     </div>
 
     <script src="script.js"></script>

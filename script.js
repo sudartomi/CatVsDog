@@ -1,107 +1,96 @@
-let playerName;
-let dogCount = 0;
-let catCount = 0;
-let dogLeaderboard = JSON.parse(localStorage.getItem("dogLeaderboard")) || [];
-let catLeaderboard = JSON.parse(localStorage.getItem("catLeaderboard")) || [];
+let username = "";
+let dogClicks = 0;
+let catClicks = 0;
+const leaderboardURL = "https://raw.githubusercontent.com/your-github-username/dog-vs-cat-clicker/main/leaderboard.json";
 
-// Load leaderboard on page load
-document.addEventListener("DOMContentLoaded", () => {
-    checkLogin();
+// Load sounds
+const dogSound = new Audio('dog-bark.mp3');
+const catSound = new Audio('cat-meow.mp3');
+
+document.getElementById("dog").addEventListener("click", function() {
+    dogClicks++;
+    document.getElementById("dogClicks").innerText = `Clicks: ${dogClicks}`;
+    dogSound.play();
 });
 
-// Check if user is logged in
-function checkLogin() {
-    playerName = localStorage.getItem("playerName");
+document.getElementById("cat").addEventListener("click", function() {
+    catClicks++;
+    document.getElementById("catClicks").innerText = `Clicks: ${catClicks}`;
+    catSound.play();
+});
 
-    if (playerName) {
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("gameScreen").style.display = "flex";
-        loadUserScore();
-        updateLeaderboard("dog");
-        updateLeaderboard("cat");
-    }
-}
-
-// Login function
-function login() {
-    let inputName = document.getElementById("playerName").value.trim();
-    if (!inputName) {
-        alert("Please enter a valid name!");
+function startGame() {
+    username = document.getElementById("username").value.trim();
+    if (username === "") {
+        alert("Please enter a name!");
         return;
     }
 
-    playerName = inputName;
-    localStorage.setItem("playerName", playerName);
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("gameScreen").style.display = "flex";
-    loadUserScore();
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("game").classList.remove("hidden");
+    loadLeaderboard();
 }
 
-// Logout function
-function logout() {
-    localStorage.removeItem("playerName");
-    window.location.reload();
-}
-
-// Load user's previous score
-function loadUserScore() {
-    let dogEntry = dogLeaderboard.find(entry => entry.name === playerName);
-    let catEntry = catLeaderboard.find(entry => entry.name === playerName);
-
-    dogCount = dogEntry ? dogEntry.score : 0;
-    catCount = catEntry ? catEntry.score : 0;
-
-    document.getElementById("dogCount").innerText = dogCount;
-    document.getElementById("catCount").innerText = catCount;
-}
-
-// Click event for the dog
-function clickDog() {
-    dogCount++;
-    document.getElementById("dogCount").innerText = dogCount;
-    document.getElementById("dogImage").src = "dog_bark_full.gif";
-
-    setTimeout(() => {
-        document.getElementById("dogImage").src = "dog_still.png";
-    }, 500);
-
-    updateLeaderboard("dog");
-}
-
-// Click event for the cat
-function clickCat() {
-    catCount++;
-    document.getElementById("catCount").innerText = catCount;
-    document.getElementById("catImage").src = "cat_meow_full.gif";
-
-    setTimeout(() => {
-        document.getElementById("catImage").src = "cat_still.png";
-    }, 500);
-
-    updateLeaderboard("cat");
-}
-
-// Update the leaderboard
-function updateLeaderboard(animal) {
-    let leaderboard = animal === "dog" ? dogLeaderboard : catLeaderboard;
-    let listId = animal === "dog" ? "dogLeaderboard" : "catLeaderboard";
-    let count = animal === "dog" ? dogCount : catCount;
-
-    let existingEntry = leaderboard.find(entry => entry.name === playerName);
-    if (existingEntry) {
-        existingEntry.score = count;
-    } else {
-        leaderboard.push({ name: playerName, score: count });
+async function loadLeaderboard() {
+    try {
+        let response = await fetch(leaderboardURL);
+        let data = await response.json();
+        updateLeaderboardUI(data);
+    } catch (error) {
+        console.error("Failed to load leaderboard.", error);
     }
+}
 
-    leaderboard.sort((a, b) => b.score - a.score);
-    localStorage.setItem(animal === "dog" ? "dogLeaderboard" : "catLeaderboard", JSON.stringify(leaderboard));
-
-    let list = document.getElementById(listId);
+function updateLeaderboardUI(data) {
+    let list = document.getElementById("leaderboard");
     list.innerHTML = "";
-    leaderboard.forEach(entry => {
+    data.forEach(player => {
         let li = document.createElement("li");
-        li.textContent = `${entry.name}: ${entry.score}`;
+        li.textContent = `${player.name}: ${player.clicks} clicks`;
         list.appendChild(li);
+    });
+}
+
+async function saveScore() {
+    let newScore = { name: username, clicks: dogClicks + catClicks };
+
+    let response = await fetch(leaderboardURL);
+    let leaderboard = await response.json();
+    
+    leaderboard.push(newScore);
+    leaderboard.sort((a, b) => b.clicks - a.clicks);
+    leaderboard = leaderboard.slice(0, 100); // Keep only the top 100 players
+
+    await updateLeaderboardFile(leaderboard);
+    updateLeaderboardUI(leaderboard);
+}
+
+async function updateLeaderboardFile(leaderboard) {
+    let githubToken = "YOUR_PERSONAL_ACCESS_TOKEN"; // GitHub API key
+    let repo = "your-github-username/dog-vs-cat-clicker";
+    let path = "leaderboard.json";
+
+    let response = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+        headers: {
+            "Authorization": `token ${githubToken}`
+        }
+    });
+
+    let fileData = await response.json();
+    let sha = fileData.sha;
+
+    let newContent = btoa(JSON.stringify(leaderboard, null, 2));
+
+    await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `token ${githubToken}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: "Updated leaderboard",
+            content: newContent,
+            sha: sha
+        })
     });
 }
