@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dog vs Cat Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Dog vs Cat Clicker</h1>
+
+    <!-- Leaderboard (Always Visible) -->
+    <div id="leaderboardContainer">
+        <div id="dogLeaderboardSection">
+            <h3>Dog Leaderboard</h3>
+            <ol id="dogLeaderboard"></ol>
+        </div>
+        <div id="catLeaderboardSection">
+            <h3>Cat Leaderboard</h3>
+            <ol id="catLeaderboard"></ol>
+        </div>
+    </div>
+
+    <!-- Name input -->
+    <div id="nameInputContainer">
+        <h2>Enter Your Name</h2>
+        <input type="text" id="playerName" placeholder="Enter name">
+        <button onclick="startGame()">Start</button>
+    </div>
+
+    <!-- Game area -->
+    <div id="gameContainer">
+        <div id="leftSide">
+            <h2>Dogs</h2>
+            <button id="dogButton">
+                <img id="dogImage" src="assets/dog.png" alt="Dog">
+            </button>
+            <p>Your Clicks: <span id="dogClicks">0</span></p>
+        </div>
+
+        <div id="rightSide">
+            <h2>Cats</h2>
+            <button id="catButton">
+                <img id="catImage" src="assets/cat.png" alt="Cat">
+            </button>
+            <p>Your Clicks: <span id="catClicks">0</span></p>
+        </div>
+    </div>
+
+    <!-- Click sounds -->
+    <audio id="dogSound" src="assets/dog-bark.mp3"></audio>
+    <audio id="catSound" src="assets/cat-meow.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
