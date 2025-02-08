@@ -45,7 +45,7 @@ function updateLeaderboard(animal) {
     }
 
     leaderboard.sort((a, b) => b.clicks - a.clicks);
-    leaderboard = leaderboard.slice(0, 100); // Keep only the top 100
+    leaderboard = leaderboard.slice(0, 10); // Keep only the top 10
 
     if (animal === "dog") {
         dogLeaderboard = leaderboard;
