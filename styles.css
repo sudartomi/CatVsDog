@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.side {
+    flex: 1;
+    padding: 20px;
+}
+
+.left {
+    background-color: #ffcccc;
+}
+
+.right {
+    background-color: #ccccff;
+}
+
+.middle {
+    flex: 0.2;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    width: 200px;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 20px;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dogs vs Cats</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="side left">
+            <h2>Dogs</h2>
+            <img id="dogImage" src="dog_normal.png" onclick="clickDog()" alt="Barking dog">
+            <p>Clicks: <span id="dogCount">0</span></p>
+            <h3>Leaderboard</h3>
+            <ul id="dogLeaderboard"></ul>
+        </div>
+        <div class="middle">
+            <h1>Click on your favorite!</h1>
+        </div>
+        <div class="side right">
+            <h2>Cats</h2>
+            <img id="catImage" src="cat_normal.png" onclick="clickCat()" alt="Meowing cat">
+            <p>Clicks: <span id="catCount">0</span></p>
+            <h3>Leaderboard</h3>
+            <ul id="catLeaderboard"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
