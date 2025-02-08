@@ -43,13 +43,6 @@ h2 {
     color: darkblue;
 }
 
-ol {
-    text-align: left;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 0;
-}
-
 /* Leaderboard Styling */
 #leaderboardContainer {
     display: flex;
