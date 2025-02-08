@@ -18,7 +18,7 @@ input, button {
     font-size: 16px;
 }
 
-/* Ensure leaderboard is always visible */
+/* Leaderboard always visible */
 #leaderboardContainer {
     display: flex;
     justify-content: space-around;
@@ -32,7 +32,7 @@ input, button {
     background-color: lightblue;
 }
 
-/* Game container (hidden by default) */
+/* Game area */
 #gameContainer {
     display: none;
     justify-content: space-around;
@@ -58,14 +58,7 @@ h2 {
     color: darkblue;
 }
 
-ol {
-    text-align: left;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 0;
-}
-
-/* Mobile-Friendly Layout */
+/* Mobile-Friendly */
 @media (max-width: 600px) {
     #gameContainer {
         flex-direction: row;
