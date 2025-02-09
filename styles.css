@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: url('https://your-github-link/background.gif') no-repeat center center;
+    background: background.gif'  no-repeat center center;
     background-size: cover;
 }
 
