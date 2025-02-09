@@ -4,18 +4,11 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-}
-
-/* Background (GIF) */
-.background {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: url('/mnt/data/background.gif') no-repeat center center;
+    background: url('https://your-github-link/background.gif') no-repeat center center;
     background-size: cover;
-    z-index: -1;
 }
 
+/* Layout styles */
 .container {
     display: flex;
     justify-content: space-between;
@@ -31,14 +24,14 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    padding: 10px;
+    padding: 20px;
 }
 
 .middle {
     width: 40%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -55,7 +48,7 @@ img.clicked {
 }
 
 button {
-    padding: 10px;
+    padding: 10px 20px;
     margin-top: 10px;
     cursor: pointer;
 }
@@ -63,5 +56,9 @@ button {
 ul {
     list-style: none;
     padding: 0;
-    margin-top: 20px;
+    margin: 20px 0;
+}
+
+ul li {
+    margin-bottom: 10px;
 }
