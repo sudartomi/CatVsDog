@@ -27,7 +27,7 @@ document.getElementById("dogImage").addEventListener("click", function () {
     }
     players[nameInput].dog++;
     dogTotal++;
-    updateScores();
+    saveAndUpdate();
     this.classList.add("clicked");
     setTimeout(() => this.classList.remove("clicked"), 200);
     dogSound.play();
@@ -42,19 +42,24 @@ document.getElementById("catImage").addEventListener("click", function () {
     }
     players[nameInput].cat++;
     catTotal++;
-    updateScores();
+    saveAndUpdate();
     this.classList.add("clicked");
     setTimeout(() => this.classList.remove("clicked"), 200);
     catSound.play();
 });
 
-// Update leaderboard and score difference
-function updateScores() {
-    let leaderboard = document.getElementById("leaderboard");
-    let scoreDifference = document.getElementById("scoreDifference");
-
-    // Update localStorage
+function saveAndUpdate() {
+    // Save to local storage
     localStorage.setItem("players", JSON.stringify(players));
+
+    // Update leaderboard and scores
+    updateLeaderboard();
+    updateScoreDifference();
+}
+
+function updateLeaderboard() {
+    let leaderboard = document.getElementById("leaderboard");
+    leaderboard.innerHTML = "";
 
     // Sort players by total points (dog + cat)
     let sortedPlayers = Object.entries(players).sort((a, b) => {
@@ -64,13 +69,24 @@ function updateScores() {
     });
 
     // Update leaderboard
-    leaderboard.innerHTML = "";
     sortedPlayers.forEach(([player, scores]) => {
         let li = document.createElement("li");
         li.textContent = `${player}: Dogs (${scores.dog}) | Cats (${scores.cat})`;
         leaderboard.appendChild(li);
     });
+}
 
-    // Update score difference
+function updateScoreDifference() {
+    let scoreDifference = document.getElementById("scoreDifference");
     scoreDifference.textContent = dogTotal - catTotal;
 }
+
+// Initialize scores on page load
+window.onload = function () {
+    Object.values(players).forEach(player => {
+        dogTotal += player.dog;
+        catTotal += player.cat;
+    });
+    updateLeaderboard();
+    updateScoreDifference();
+};
