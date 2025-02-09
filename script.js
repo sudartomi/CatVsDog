@@ -1,92 +1,86 @@
 let players = JSON.parse(localStorage.getItem("players")) || {};
-let dogTotal = 0;
-let catTotal = 0;
-
-// Load sounds
-let dogSound = new Audio("dog-bark.mp3");
-let catSound = new Audio("cat-meow.mp3");
+let dogTotal = JSON.parse(localStorage.getItem("dogTotal")) || 0;
+let catTotal = JSON.parse(localStorage.getItem("catTotal")) || 0;
+let currentPlayer = null;
 
 function startGame() {
-    let nameInput = document.getElementById("playerName").value.trim();
-    if (nameInput === "") {
+    const playerNameInput = document.getElementById("playerName").value.trim();
+    if (!playerNameInput) {
         alert("Enter a name first!");
         return;
     }
-    if (!players[nameInput]) {
-        players[nameInput] = { dog: 0, cat: 0 };
+    if (!players[playerNameInput]) {
+        players[playerNameInput] = { dog: 0, cat: 0 };
     }
-    alert(`Welcome, ${nameInput}! Click on the animals to earn points.`);
+    currentPlayer = playerNameInput;
+    alert(`Welcome, ${currentPlayer}! Start clicking!`);
+    updatePlayerScores();
 }
 
-// Dog click event
 document.getElementById("dogImage").addEventListener("click", function () {
-    let nameInput = document.getElementById("playerName").value.trim();
-    if (!players[nameInput]) {
+    if (!currentPlayer) {
         alert("Enter your name first!");
         return;
     }
-    players[nameInput].dog++;
+    players[currentPlayer].dog++;
     dogTotal++;
-    saveAndUpdate();
+    updatePlayerScores();
+    updateGlobalScores();
     this.classList.add("clicked");
     setTimeout(() => this.classList.remove("clicked"), 200);
-    dogSound.play();
+    new Audio("dog-bark.mp3").play();
 });
 
-// Cat click event
 document.getElementById("catImage").addEventListener("click", function () {
-    let nameInput = document.getElementById("playerName").value.trim();
-    if (!players[nameInput]) {
+    if (!currentPlayer) {
         alert("Enter your name first!");
         return;
     }
-    players[nameInput].cat++;
+    players[currentPlayer].cat++;
     catTotal++;
-    saveAndUpdate();
+    updatePlayerScores();
+    updateGlobalScores();
     this.classList.add("clicked");
     setTimeout(() => this.classList.remove("clicked"), 200);
-    catSound.play();
+    new Audio("cat-meow.mp3").play();
 });
 
-function saveAndUpdate() {
-    // Save to local storage
-    localStorage.setItem("players", JSON.stringify(players));
+function updatePlayerScores() {
+    document.getElementById("dogPlayerScore").textContent = players[currentPlayer].dog;
+    document.getElementById("catPlayerScore").textContent = players[currentPlayer].cat;
+}
 
-    // Update leaderboard and scores
+function updateGlobalScores() {
+    document.getElementById("dogTotalScore").textContent = dogTotal;
+    document.getElementById("catTotalScore").textContent = catTotal;
+    document.getElementById("scoreDifference").textContent = dogTotal - catTotal;
+
+    localStorage.setItem("players", JSON.stringify(players));
+    localStorage.setItem("dogTotal", dogTotal);
+    localStorage.setItem("catTotal", catTotal);
+
     updateLeaderboard();
-    updateScoreDifference();
 }
 
 function updateLeaderboard() {
-    let leaderboard = document.getElementById("leaderboard");
+    const leaderboard = document.getElementById("leaderboard");
     leaderboard.innerHTML = "";
 
-    // Sort players by total points (dog + cat)
-    let sortedPlayers = Object.entries(players).sort((a, b) => {
-        let aTotal = a[1].dog + a[1].cat;
-        let bTotal = b[1].dog + b[1].cat;
-        return bTotal - aTotal;
+    const sortedPlayers = Object.entries(players).sort((a, b) => {
+        const totalA = a[1].dog + a[1].cat;
+        const totalB = b[1].dog + b[1].cat;
+        return totalB - totalA;
     });
 
-    // Update leaderboard
     sortedPlayers.forEach(([player, scores]) => {
-        let li = document.createElement("li");
-        li.textContent = `${player}: Dogs (${scores.dog}) | Cats (${scores.cat})`;
-        leaderboard.appendChild(li);
+        const listItem = document.createElement("li");
+        listItem.textContent = `${player}: Dogs (${scores.dog}) | Cats (${scores.cat})`;
+        leaderboard.appendChild(listItem);
     });
 }
 
-function updateScoreDifference() {
-    let scoreDifference = document.getElementById("scoreDifference");
-    scoreDifference.textContent = dogTotal - catTotal;
-}
-
-// Initialize scores on page load
+// Initialize leaderboard and scores on page load
 window.onload = function () {
-    Object.values(players).forEach(player => {
-        dogTotal += player.dog;
-        catTotal += player.cat;
-    });
+    updateGlobalScores();
     updateLeaderboard();
-    updateScoreDifference();
 };
