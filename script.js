@@ -1,4 +1,4 @@
-let players = {};
+let players = JSON.parse(localStorage.getItem("players")) || {};
 let dogTotal = 0;
 let catTotal = 0;
 
@@ -19,7 +19,7 @@ function startGame() {
 }
 
 // Dog click event
-document.getElementById("dogImage").addEventListener("click", function() {
+document.getElementById("dogImage").addEventListener("click", function () {
     let nameInput = document.getElementById("playerName").value.trim();
     if (!players[nameInput]) {
         alert("Enter your name first!");
@@ -34,7 +34,7 @@ document.getElementById("dogImage").addEventListener("click", function() {
 });
 
 // Cat click event
-document.getElementById("catImage").addEventListener("click", function() {
+document.getElementById("catImage").addEventListener("click", function () {
     let nameInput = document.getElementById("playerName").value.trim();
     if (!players[nameInput]) {
         alert("Enter your name first!");
@@ -50,26 +50,27 @@ document.getElementById("catImage").addEventListener("click", function() {
 
 // Update leaderboard and score difference
 function updateScores() {
-    let dogLeaderboard = document.getElementById("dogLeaderboard");
-    let catLeaderboard = document.getElementById("catLeaderboard");
+    let leaderboard = document.getElementById("leaderboard");
     let scoreDifference = document.getElementById("scoreDifference");
 
-    let sortedDogPlayers = Object.entries(players).sort((a, b) => b[1].dog - a[1].dog);
-    let sortedCatPlayers = Object.entries(players).sort((a, b) => b[1].cat - a[1].cat);
+    // Update localStorage
+    localStorage.setItem("players", JSON.stringify(players));
 
-    dogLeaderboard.innerHTML = "";
-    sortedDogPlayers.forEach(player => {
-        let li = document.createElement("li");
-        li.textContent = `${player[0]}: ${player[1].dog} points`;
-        dogLeaderboard.appendChild(li);
+    // Sort players by total points (dog + cat)
+    let sortedPlayers = Object.entries(players).sort((a, b) => {
+        let aTotal = a[1].dog + a[1].cat;
+        let bTotal = b[1].dog + b[1].cat;
+        return bTotal - aTotal;
     });
 
-    catLeaderboard.innerHTML = "";
-    sortedCatPlayers.forEach(player => {
+    // Update leaderboard
+    leaderboard.innerHTML = "";
+    sortedPlayers.forEach(([player, scores]) => {
         let li = document.createElement("li");
-        li.textContent = `${player[0]}: ${player[1].cat} points`;
-        catLeaderboard.appendChild(li);
+        li.textContent = `${player}: Dogs (${scores.dog}) | Cats (${scores.cat})`;
+        leaderboard.appendChild(li);
     });
 
+    // Update score difference
     scoreDifference.textContent = dogTotal - catTotal;
 }
